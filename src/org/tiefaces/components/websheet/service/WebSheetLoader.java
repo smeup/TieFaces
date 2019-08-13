@@ -28,6 +28,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.primefaces.PrimeFaces;
 import org.primefaces.component.datatable.DataTable;
+import org.primefaces.context.PrimeRequestContext;
 import org.tiefaces.common.FacesUtility;
 import org.tiefaces.common.TieConstants;
 import org.tiefaces.components.websheet.TieWebSheetBean;
@@ -959,22 +960,21 @@ public class WebSheetLoader implements Serializable {
 	}
 
 	/**
-	 * Sets the unsaved status.
-	 *
-	 * @param requestContext
-	 *            the request context
-	 * @param statusFlag
-	 *            the status flag
-	 */
-    public void setUnsavedStatus(final PrimeFaces pf,
+     * Sets the unsaved status.
+     *
+     * @param prc
+     *            the request context
+     * @param statusFlag
+     *            the status flag
+     */
+    public void setUnsavedStatus(final PrimeRequestContext prc,
 			final Boolean statusFlag) {
 
 		// in client js should have setUnsavedState method
-        if (pf != null) {
+        if (prc != null) {
 			LOG.log(Level.FINE,
 					"run setUnsavedState(" + statusFlag.toString() + ")");
-            pf.executeScript(
-					"setUnsavedState(" + statusFlag.toString() + ")");
+            prc.getScriptsToExecute().add("setUnsavedState(" + statusFlag.toString() + ")");
 		}
 
 	}

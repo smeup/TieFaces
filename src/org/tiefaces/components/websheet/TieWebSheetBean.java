@@ -36,7 +36,7 @@ import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFEvaluationWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.primefaces.PrimeFaces;
+import org.primefaces.context.PrimeRequestContext;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -761,8 +761,7 @@ public class TieWebSheetBean extends TieWebSheetView
 	 * 
 	 */
 	public void processSave() {
-		this.getHelper().getWebSheetLoader().setUnsavedStatus(
-                PrimeFaces.current(), false);
+        this.getHelper().getWebSheetLoader().setUnsavedStatus(PrimeRequestContext.getCurrentInstance(), false);
 		return;
 	}
 

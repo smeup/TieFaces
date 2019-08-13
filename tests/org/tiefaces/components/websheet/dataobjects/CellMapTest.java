@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import org.junit.Test;
 import org.tiefaces.common.Item;
 import org.tiefaces.components.websheet.TieWebSheetBean;
@@ -107,13 +108,13 @@ public class CellMapTest {
 	@Test
 	public final void testGetChart() throws Exception {
 
-		TieWebSheetBean bean = new TieWebSheetBean();
+		final TieWebSheetBean bean = new TieWebSheetBean();
 		bean.init();
-		InputStream stream =
+		final InputStream stream =
 				this.getClass().getClassLoader().getResourceAsStream(
 						"resources/sheet/linecharts1.xlsx");
 		assertEquals(bean.loadWebSheet(stream), 1);
-		String chartViewId = (String) bean.getCellsMap().get("7:0:chart");
+		final String chartViewId = (String) bean.getCellsMap().get("7:0:chart");
 		assertFalse(chartViewId.isEmpty());
 
 	}
@@ -121,14 +122,14 @@ public class CellMapTest {
 	@Test
 	public final void testGet() throws Exception {
 
-		TieWebSheetBean bean = new TieWebSheetBean();
+		final TieWebSheetBean bean = new TieWebSheetBean();
 		bean.init();
-		InputStream stream =
+		final InputStream stream =
 				this.getClass().getClassLoader().getResourceAsStream(
 						"resources/sheet/PRICELISTINPUTVALIDATION.xlsx");
-		List<Item> itemList = new ArrayList<Item>();
+		final List<Item> itemList = new ArrayList<Item>();
 		itemList.add(new Item());
-		HashMap<String, Object> context = new HashMap<String, Object>();
+		final HashMap<String, Object> context = new HashMap<String, Object>();
 		context.put("items", itemList);
 		assertEquals(bean.loadWebSheet(stream, context), 1);
 		assertEquals(bean.getCellsMap().get("0:0"), "Sale Price Report");
@@ -144,17 +145,17 @@ public class CellMapTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public final void testPut() throws Exception {
-		TieWebSheetBean bean = new TieWebSheetBean();
+		final TieWebSheetBean bean = new TieWebSheetBean();
 		bean.init();
-		InputStream stream =
+		final InputStream stream =
 				this.getClass().getClassLoader().getResourceAsStream(
 						"resources/sheet/PRICELISTINPUTVALIDATION.xlsx");
-		List<Item> itemList = new ArrayList<Item>();
+		final List<Item> itemList = new ArrayList<Item>();
 		itemList.add(new Item());
-		HashMap<String, Object> context = new HashMap<String, Object>();
+		final HashMap<String, Object> context = new HashMap<String, Object>();
 		context.put("items", itemList);
 		assertEquals(bean.loadWebSheet(stream, context), 1);
-		assertEquals((String) bean.getCellsMap().put("4:1", "test item"),
+		assertEquals(bean.getCellsMap().put("4:1", "test item"),
 				"test item");
 		assertEquals(bean.getCellsMap().get("4:1"), "test item");
 	}

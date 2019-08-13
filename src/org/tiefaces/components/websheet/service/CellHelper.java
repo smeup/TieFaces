@@ -10,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.poi.ss.usermodel.Cell;
-import org.primefaces.PrimeFaces;
+import org.primefaces.context.PrimeRequestContext;
 import org.tiefaces.common.TieConstants;
 import org.tiefaces.components.websheet.TieWebSheetBean;
 import org.tiefaces.components.websheet.dataobjects.CollectionObject;
@@ -78,7 +78,7 @@ public class CellHelper {
 							parent.getSerialDataContext().getDataContext(),
 							saveAttr, strValue, parent.getExpEngine());
 					parent.getHelper().getWebSheetLoader().setUnsavedStatus(
-                            PrimeFaces.current(), true);
+                            PrimeRequestContext.getCurrentInstance(), true);
 				}
 			}
 		}
