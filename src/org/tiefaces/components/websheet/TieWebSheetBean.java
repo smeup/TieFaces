@@ -36,7 +36,7 @@ import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFEvaluationWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.primefaces.context.RequestContext;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -95,7 +95,7 @@ public class TieWebSheetBean extends TieWebSheetView
 	/**
 	 * cell attributes map.
 	 */
-	private CellAttributesMap cellAttributesMap = new CellAttributesMap(
+	private final CellAttributesMap cellAttributesMap = new CellAttributesMap(
 			new HashMap<String, Map<String, String>>(),
 			new HashMap<String, String>(),
 			new HashMap<String, List<CellFormAttributes>>(),
@@ -139,7 +139,7 @@ public class TieWebSheetBean extends TieWebSheetView
 	/**
 	 * cell default control.
 	 */
-	private Map<String, Map<String, String>> cellDefaultControl = new HashMap<>();
+	private final Map<String, Map<String, String>> cellDefaultControl = new HashMap<>();
 
 	/** for download file. */
 	private transient StreamedContent exportFile;
@@ -148,7 +148,7 @@ public class TieWebSheetBean extends TieWebSheetView
 	 * cells map for current display sheet.
 	 */
 
-	private CellMap cellsMap = new CellMap(this);
+	private final CellMap cellsMap = new CellMap(this);
 	
 	/**
 	 * workaround for rendered attributes.
@@ -607,9 +607,9 @@ public class TieWebSheetBean extends TieWebSheetView
 			return;
 		}
 		int maxColumns = 0;
-		for (SheetConfiguration sheetConfig : this.getSheetConfigMap()
+		for (final SheetConfiguration sheetConfig : this.getSheetConfigMap()
 				.values()) {
-			int counts = sheetConfig.getHeaderCellRange().getRightCol()
+			final int counts = sheetConfig.getHeaderCellRange().getRightCol()
 					- sheetConfig.getHeaderCellRange().getLeftCol() + 1;
 			if (maxColumns < counts) {
 				maxColumns = counts;
@@ -680,7 +680,7 @@ public class TieWebSheetBean extends TieWebSheetView
 	 *            tabchange event.
 	 */
 	public void onTabChange(final TabChangeEvent event) {
-		String tabName = event.getTab().getTitle();
+		final String tabName = event.getTab().getTitle();
 		loadWorkSheetByTabName(tabName);
 	}
 
@@ -695,7 +695,7 @@ public class TieWebSheetBean extends TieWebSheetView
 	public int loadWorkSheetByTabName(final String tabName) {
 
 		try {
-			int sheetId = this.getHelper().getWebSheetLoader()
+			final int sheetId = this.getHelper().getWebSheetLoader()
 					.findTabIndexWithName(tabName);
 			if ((getSheetConfigMap() != null)
 					&& (sheetId < getSheetConfigMap().size())) {
@@ -703,7 +703,7 @@ public class TieWebSheetBean extends TieWebSheetView
 				setActiveTabIndex(sheetId);
 			}
 			return 1;
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			LOG.log(Level.SEVERE, "loadWorkSheetByTabName failed. error = "
 					+ ex.getMessage(), ex);
 
@@ -725,15 +725,15 @@ public class TieWebSheetBean extends TieWebSheetView
 	public void doExport() {
 		try {
 
-			String fileName = getFileName();
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			final String fileName = getFileName();
+			final ByteArrayOutputStream out = new ByteArrayOutputStream();
 			this.getWb().write(out);
-			InputStream stream = new BufferedInputStream(
+			final InputStream stream = new BufferedInputStream(
 					new ByteArrayInputStream(out.toByteArray()));
 			exportFile = new DefaultStreamedContent(stream,
 					"application/force-download", fileName);
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOG.log(Level.SEVERE,
 					"Error in export file : " + e.getLocalizedMessage(), e);
 		}
@@ -762,7 +762,7 @@ public class TieWebSheetBean extends TieWebSheetView
 	 */
 	public void processSave() {
 		this.getHelper().getWebSheetLoader().setUnsavedStatus(
-				RequestContext.getCurrentInstance(), false);
+                PrimeFaces.current(), false);
 		return;
 	}
 
@@ -882,12 +882,12 @@ public class TieWebSheetBean extends TieWebSheetView
 	 *            component system event.
 	 */
 	public void populateComponent(final ComponentSystemEvent event) {
-		UIComponent component = event.getComponent();
-		int[] rowcol = CellUtility
+		final UIComponent component = event.getComponent();
+		final int[] rowcol = CellUtility
 				.getRowColFromComponentAttributes(component);
-		int row = rowcol[0];
-		int col = rowcol[1];
-		FacesCell fcell = CellUtility.getFacesCellFromBodyRow(row, col,
+		final int row = rowcol[0];
+		final int col = rowcol[1];
+		final FacesCell fcell = CellUtility.getFacesCellFromBodyRow(row, col,
 				this.getBodyRows(), this.getCurrent().getCurrentTopRow(),
 				this.getCurrent().getCurrentLeftColumn());
 		CellControlsUtility.populateAttributes(component, fcell,
@@ -900,7 +900,7 @@ public class TieWebSheetBean extends TieWebSheetView
 	 * @return the currentSheetConfig
 	 */
 	public SheetConfiguration getCurrentSheetConfig() {
-		String currentTabName = this.getCurrent().getCurrentTabName();
+		final String currentTabName = this.getCurrent().getCurrentTabName();
 		if (currentTabName == null) {
 			return null;
 		}
@@ -981,7 +981,7 @@ public class TieWebSheetBean extends TieWebSheetView
 
 	public String getDefaultDatePattern() {
 	    if (defaultDatePattern == null) {
-		DateFormat formatter = DateFormat.getDateInstance(DateFormat.SHORT,
+		final DateFormat formatter = DateFormat.getDateInstance(DateFormat.SHORT,
 			Locale.getDefault());
 		defaultDatePattern = ((SimpleDateFormat) formatter).toLocalizedPattern();
 	    }

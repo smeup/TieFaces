@@ -10,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.poi.ss.usermodel.Cell;
-import org.primefaces.context.RequestContext;
+import org.primefaces.PrimeFaces;
 import org.tiefaces.common.TieConstants;
 import org.tiefaces.components.websheet.TieWebSheetBean;
 import org.tiefaces.components.websheet.dataobjects.CollectionObject;
@@ -64,13 +64,13 @@ public class CellHelper {
 	public final void saveDataInContext(final Cell poiCell,
 			final String strValue) {
 
-		String saveAttrList = SaveAttrsUtility
+		final String saveAttrList = SaveAttrsUtility
 				.getSaveAttrListFromRow(poiCell.getRow());
 		if (saveAttrList != null) {
-			String saveAttr = SaveAttrsUtility.getSaveAttrFromList(
+			final String saveAttr = SaveAttrsUtility.getSaveAttrFromList(
 					poiCell.getColumnIndex(), saveAttrList);
 			if (saveAttr != null) {
-				String fullName = ConfigurationUtility
+				final String fullName = ConfigurationUtility
 						.getFullNameFromRow(poiCell.getRow());
 				if (fullName != null) {
 					restoreDataContext(fullName);
@@ -78,7 +78,7 @@ public class CellHelper {
 							parent.getSerialDataContext().getDataContext(),
 							saveAttr, strValue, parent.getExpEngine());
 					parent.getHelper().getWebSheetLoader().setUnsavedStatus(
-							RequestContext.getCurrentInstance(), true);
+                            PrimeFaces.current(), true);
 				}
 			}
 		}
@@ -92,7 +92,7 @@ public class CellHelper {
 		parent.getFormulaEvaluator().clearAllCachedResultValues();
 		try {
 			parent.getFormulaEvaluator().evaluateAll();
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			// skip the formula exception when recalc but log it
 			LOG.log(Level.SEVERE,
 					" recalc formula error : " + ex.getLocalizedMessage(),
@@ -162,8 +162,8 @@ public class CellHelper {
 	public final FacesCell getFacesCellWithRowColFromCurrentPage(
 			final int rowIndex, final int colIndex) {
 		if (parent.getBodyRows() != null) {
-			int top = parent.getCurrent().getCurrentTopRow();
-			int left = parent.getCurrent().getCurrentLeftColumn();
+			final int top = parent.getCurrent().getCurrentTopRow();
+			final int left = parent.getCurrent().getCurrentLeftColumn();
 			return parent.getBodyRows().get(rowIndex - top).getCells()
 					.get(colIndex - left);
 		}
@@ -178,16 +178,16 @@ public class CellHelper {
 	 */
 	public final void restoreDataContext(final String fullName) {
 
-		String[] parts = fullName.split(":");
+		final String[] parts = fullName.split(":");
 
 		if (!isNeedRestore(fullName, parts)) {
 			return;
 		}
 
 		boolean stopSkip = false;
-		List<String> list = parent.getCurrent()
+		final List<String> list = parent.getCurrent()
 				.getCurrentDataContextNameList();
-		int listSize = list.size();
+		final int listSize = list.size();
 
 		// prepare collection data in context.
 		// must loop through the full name which may have multiple
@@ -196,10 +196,10 @@ public class CellHelper {
 		// need prepare department.1 and employee.0
 
 		for (int i = 0; i < parts.length; i++) {
-			String part = parts[i];
+			final String part = parts[i];
 			boolean skip = false;
 			if ((!stopSkip) && (i < listSize)) {
-				String listPart = list.get(i);
+				final String listPart = list.get(i);
 				if (part.equalsIgnoreCase(listPart)) {
 					skip = true;
 				}
@@ -226,8 +226,8 @@ public class CellHelper {
 	 * @return the collection object
 	 */
 	public final CollectionObject getLastCollect(final String fullName) {
-		String[] parts = fullName.split(":");
-		String part = parts[parts.length - 1];
+		final String[] parts = fullName.split(":");
+		final String part = parts[parts.length - 1];
 		return startRestoreDataContext(part);
 	}
 
@@ -267,8 +267,8 @@ public class CellHelper {
 	 */
 	private CollectionObject startRestoreDataContext(final String part) {
 		if (part.startsWith(TieConstants.EACH_COMMAND_FULL_NAME_PREFIX)) {
-			String[] varparts = part.split("\\.");
-			CollectionObject collect = new CollectionObject();
+			final String[] varparts = part.split("\\.");
+			final CollectionObject collect = new CollectionObject();
 
 			collect.setEachCommand(
 					CommandUtility
